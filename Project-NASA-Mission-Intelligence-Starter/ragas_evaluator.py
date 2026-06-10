@@ -1,3 +1,16 @@
+from typing import Dict, List, Optional
+
+from ragas.llms import LangchainLLMWrapper
+from ragas.embeddings import LangchainEmbeddingsWrapper
+from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+
+try:
+    from ragas import SingleTurnSample
+    from ragas.metrics import ResponseRelevancy, Faithfulness
+    RAGAS_AVAILABLE = True
+except ImportError:
+    RAGAS_AVAILABLE = False
 def evaluate_response_quality(question: str, answer: str, contexts: List[str]) -> Dict[str, float]:
     """Evaluate response quality using RAGAS metrics"""
 
