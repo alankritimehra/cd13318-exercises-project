@@ -38,7 +38,7 @@ def discover_chroma_backends() -> Dict[str, Dict[str, str]]:
 
     return rag_client.discover_chroma_backends()
 
-#@st.cache_resource
+
 def initialize_rag_system(chroma_dir: str, collection_name: str):
     """Initialize the RAG system with specified backend"""
 
@@ -183,17 +183,17 @@ def main():
     with st.spinner("Initializing RAG system..."):
         try:
             collection = initialize_rag_system(
-            selected_backend["path"],
-            selected_backend["collection_name"]
+                selected_backend["path"],
+                selected_backend["collection_name"]
             )
 
             success = True
             error = None
 
         except Exception as e:
-        collection = None
-        success = False
-        error = str(e)
+            collection = None
+            success = False
+            error = str(e)
     if not success:
         st.error(f"Failed to initialize RAG system: {error}")
         st.stop()
