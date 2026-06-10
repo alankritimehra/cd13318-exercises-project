@@ -40,12 +40,12 @@ def discover_chroma_backends() -> Dict[str, Dict[str, str]]:
 
 #@st.cache_resource
 def initialize_rag_system(chroma_dir: str, collection_name: str):
-    """Initialize the RAG system with specified backend (cached for performance)"""
+    """Initialize the RAG system with specified backend"""
 
-    try:
-       return rag_client.initialize_rag_system(chroma_dir, collection_name)
-    except Exception as e:
-        return None, False, str(e)
+    return rag_client.initialize_rag_system(
+        chroma_dir,
+        collection_name
+    )
 
 def retrieve_documents(collection, query: str, n_results: int = 3, 
                       mission_filter: Optional[str] = None) -> Optional[Dict]:
@@ -181,12 +181,19 @@ def main():
     
     # Initialize RAG system
     with st.spinner("Initializing RAG system..."):
-
-        collection, success, error = initialize_rag_system(
-            selected_backend["directory"], 
+        try:
+            collection = initialize_rag_system(
+            selected_backend["path"],
             selected_backend["collection_name"]
-        )
-    
+            )
+
+            success = True
+            error = None
+
+        except Exception as e:
+        collection = None
+        success = False
+        error = str(e)
     if not success:
         st.error(f"Failed to initialize RAG system: {error}")
         st.stop()
