@@ -304,6 +304,21 @@ Range:
 Higher is better.
 
 ---
+## Dataset-Based Batch Evaluation
+
+The project includes `evaluation_dataset.txt`, which contains mission-relevant questions across overview, crew, technical, emergency, disaster-analysis, and timeline categories.
+
+The dataset is used by the standalone batch evaluation workflow in `batch_evaluate.py`.
+
+Run batch evaluation:
+
+```bash
+python batch_evaluate.py \
+  --openai-key YOUR_KEY \
+  --chroma-dir ./chroma_db_openai \
+  --collection-name nasa_space_missions_text \
+  --dataset-path evaluation_dataset.txt \
+  --output-path evaluation_report.json
 
 # Metadata Stored in ChromaDB
 
