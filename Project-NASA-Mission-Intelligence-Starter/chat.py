@@ -172,6 +172,7 @@ def main():
         # Evaluation settings
         st.subheader("📊 Evaluation Settings")
         enable_evaluation = st.checkbox("Enable RAGAS Evaluation", value=RAGAS_AVAILABLE)
+        run_batch_eval = st.button("Run Batch Evaluation Dataset")
         
         # Initialize RAG system when backend changes
         if (st.session_state.current_backend != selected_backend_key):
@@ -197,6 +198,31 @@ def main():
     if not success:
         st.error(f"Failed to initialize RAG system: {error}")
         st.stop()
+    # Batch evaluation using evaluation_dataset.txt
+    if run_batch_eval:
+        with st.spinner("Running batch evaluation from evaluation_dataset.txt..."):
+            batch_report = ragas_evaluator.run_batch_evaluation(
+                collection=collection,
+                openai_key=openai_key,
+                rag_client=rag_client,
+                llm_client=llm_client,
+                dataset_path="evaluation_dataset.txt",
+                n_results=n_docs,
+                model=model_choice
+            )
+
+        st.success("Batch evaluation complete. Report saved to evaluation_report.json.")
+        st.subheader("Batch Evaluation Aggregate Summary")
+        st.json(batch_report["aggregate_summary"])
+
+        st.subheader("Per-Question Evaluation Results")
+        for item in batch_report["per_question_results"]:
+            with st.expander(item["question"]):
+                st.write("Answer:")
+                st.write(item["answer"])
+                st.write("Scores:")
+                st.json(item["scores"])
+         
     
     # Display evaluation metrics if available
     if st.session_state.last_evaluation and enable_evaluation:
