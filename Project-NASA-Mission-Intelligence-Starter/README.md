@@ -95,7 +95,22 @@ Uses RAGAS metrics:
 - Real-time evaluation display
 
 ---
+## Batch Evaluation
 
+The system uses evaluation_dataset.txt to run automated end-to-end testing.
+
+Workflow:
+1. Load evaluation questions
+2. Retrieve relevant documents from ChromaDB
+3. Generate responses using OpenAI
+4. Evaluate responses using RAGAS
+5. Save results to evaluation_report.json
+
+Metrics:
+- Faithfulness
+- Response Relevancy
+
+Aggregate statistics such as average scores are generated automatically.
 # Installation
 
 ## Clone Repository
